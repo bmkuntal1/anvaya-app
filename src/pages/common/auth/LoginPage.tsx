@@ -6,7 +6,7 @@ import { useApi } from "@/hooks/use-api";
 import { AuthLayout } from "./AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { FormInput } from "@/components/ui/form-input";
+import { FormInput } from "@/components/custom/form/FormInput";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { useAuthStore } from "@/stores/authStore";
@@ -22,11 +22,11 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export const LoginPage = () => {
   const { toast } = useToast();
-  const { usePostMutation } = useApi();
+  const { useApiMutation } = useApi();
   const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
 
-  const form = useForm<LoginFormData>({
+  const form = useForm<LoginFormData>({ 
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
@@ -34,7 +34,7 @@ export const LoginPage = () => {
     },
   });
 
-  const loginMutation = usePostMutation<{ token: string }, LoginFormData>('/auth/login', {
+  const loginMutation = useApiMutation('/auth/login', {
     onSuccess: (data) => {
       toast({ title: "Login successful", description: "Welcome back!" });
       login(data.data as Tokens);

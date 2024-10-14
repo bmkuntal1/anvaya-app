@@ -9,7 +9,7 @@ export interface AuthState {
   user: User | null;
   accessToken: string | null;
   refreshToken: string | null;
-  expiresAt: number | null;
+  expiresAt: Date | null;
   login: (tokens: Tokens) => void;
   logout: () => void;
   isTokenExpired: () => boolean;
@@ -19,5 +19,5 @@ export interface AuthState {
 export interface Tokens {
   accessToken: string;
   refreshToken: string;
-  expiresIn: number; // in seconds
+  expires: Date;
 }

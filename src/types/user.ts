@@ -4,7 +4,11 @@ export interface User {
     email: string;
 }
 
-export interface UserFormData extends Omit<User, 'id'> {
-    password: string;
-    confirmPassword: string;
+export interface AddUserFormData extends Omit<User, 'id'> {
+   firstName: string;
+   lastName: string;
+   email: string;
+   password: string;
+   phoneNumber: string;
+   role: string;
 }

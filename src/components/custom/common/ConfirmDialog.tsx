@@ -7,38 +7,57 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
-import { AlertCircle, Trash } from "lucide-react"
-export const ConfirmDialog = ({ title, message, onConfirm, type = 'confirm', confirmButtonText = 'OK', cancelButtonText = 'Cancel', }: { title: string, message: string | React.ReactNode, onConfirm: () => void, type?: 'confirm' | 'alert' | 'delete', confirmButtonText?: string, cancelButtonText?: string }) => {
+
+import { AlertCircle, Trash } from "lucide-react";
+
+export type ConfirmDialogProps = {
+    open: boolean;
+    onClose: (result: boolean) => void;
+    message: string|React.ReactNode;
+    title?: string;
+    type?: 'confirm' | 'alert' | 'delete';
+    confirmText?: string;
+    cancelText?: string;
+    trigger?: React.ReactNode;
+};
+
+export const ConfirmDialog = ({ open, onClose, message, type = 'confirm', title='Confirmation', confirmText = 'OK', cancelText = 'Cancel', }: ConfirmDialogProps) => {
+    let messageElement = message;  
     if (type === 'alert') {
-        message = <span className="flex items-center"><AlertCircle className="w-4 h-4 mr-2" color="orange" /> {message}</span>;
-        confirmButtonText = 'Close';
+        messageElement = <span className="flex items-center"><AlertCircle className="w-4 h-4 mr-2" color="orange" /> {message}</span>;
+        confirmText = 'Close';
     }
 
     if (type === 'delete') {
-        message = <span className="flex items-center"><Trash className="w-4 h-4 mr-2" color="red" /> {message}</span>;
-        confirmButtonText = 'Delete';
+        messageElement = <span className="flex items-center"><Trash className="w-4 h-4 mr-2" color="red" /> {message}</span>;
+        confirmText = 'Delete';
     }
 
+    const handleOpenChange = (open: boolean) => {
+        if (!open) {
+            onClose(false);
+        }
+    }
+    
     return (
-        <AlertDialog>
-            <AlertDialogTrigger asChild>
-                <Button variant="outline">Show Dialog</Button>
-            </AlertDialogTrigger>
+        <AlertDialog defaultOpen={open} onOpenChange={handleOpenChange}>
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>{title}</AlertDialogTitle>
                     <AlertDialogDescription>
-                        {message}
+                        {messageElement}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel>{cancelButtonText}</AlertDialogCancel>
-                    <AlertDialogAction onClick={onConfirm}>{confirmButtonText}</AlertDialogAction>
+                    <AlertDialogCancel>{cancelText}</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => onClose(true)}>{confirmText}</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
-    )
-}
+    );
+};
+
+
+
+
