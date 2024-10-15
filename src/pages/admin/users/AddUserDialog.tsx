@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { FormInput } from '@/components/custom/form/FormInput';
 import { AddUserFormData, } from '@/types/user';
-import { PageDialog } from '@/components/custom/common/PageDialog';
+import { PageDialog } from '@/components/custom/dialogs/PageDialog';
 import { useApi } from '@/hooks/use-api';
 import { useQueryClient } from '@tanstack/react-query';
 import { PlusCircle } from 'lucide-react';
@@ -50,6 +50,7 @@ export const AddUserDialog = ({ onClose }: { onClose?: (success: boolean) => voi
     if (!open) {
       onClose && onClose(result ?? false);
     }
+    form.reset();
     setOpen(open);
   }
 
@@ -73,7 +74,7 @@ export const AddUserDialog = ({ onClose }: { onClose?: (success: boolean) => voi
   return (
     <PageDialog open={open} onOpenChange={handleOpenChange} title="Add User" trigger={
       <Button size="sm" className="h-8 gap-1">
-        <PlusCircle className="h-3.5 w-3.5" />
+        <PlusCircle className="h-3 w-3" />
         <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
           Add User
         </span>

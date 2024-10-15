@@ -14,19 +14,32 @@ export const SearchInput = ({ placeholder, onChange }: { placeholder: string, on
         onChange(search);
     };
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            handleSearch();
+        }
+    };
+
+    const handleClear = () => {
+        setSearch('');
+        onChange('');
+    };
+
     return (
         <div className="flex items-center gap-2">
             <div className="relative ml-auto flex-1 md:grow-0">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Search className="absolute left-2.5 top-2 h-4 w-4 text-muted-foreground" />
                 <Input
-                    type="search"
+                    type="text"
                     placeholder={placeholder}
                     value={search}
                     onChange={handleChange}
-                    className="w-full rounded-sm bg-background pl-8 py-1 md:w-[200px] lg:w-[336px]"
+                    onKeyDown={handleKeyDown}
+                    className="w-full rounded-sm bg-background pl-8 pr-16 h-8 md:w-[200px] lg:w-[336px]"
                 />
+                {search && <Button onClick={handleClear} className="h-6 w-12  absolute right-1.5 top-1"> Clear</Button>}
             </div>
-            <Button size="sm" onClick={handleSearch}>Search</Button>
+
         </div>
     );
 }

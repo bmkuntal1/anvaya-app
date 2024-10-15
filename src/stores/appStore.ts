@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { ConfirmDialogProps } from '@/components/custom/common/ConfirmDialog';
+import { ConfirmDialogProps } from '@/components/custom/dialogs/ConfirmDialog';
 
 interface AppState {
     confirmDialog: ConfirmDialogProps | null;

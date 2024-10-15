@@ -1,4 +1,4 @@
-import { ConfirmDialog } from "@/components/custom/common/ConfirmDialog";
+import { ConfirmDialog } from "@/components/custom/dialogs/ConfirmDialog";
 import { Toaster } from "@/components/ui/sonner";
 import { appStore } from "@/stores/appStore";
 

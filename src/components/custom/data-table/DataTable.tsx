@@ -33,6 +33,7 @@ import { DataTablePagination } from "./DataTablePagination"
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  pageCount: number
   pagination: PaginationState
   onPaginationChange: (pagination: Updater<PaginationState>) => void
 }
@@ -40,9 +41,10 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
+  pageCount,
   pagination,
   onPaginationChange,
-}: DataTableProps<TData, TValue>) {
+}: Readonly<DataTableProps<TData, TValue>>) {
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -50,6 +52,7 @@ export function DataTable<TData, TValue>({
 
   const table = useReactTable({
     data,
+    pageCount,
     columns,
     state: {
       sorting,
@@ -58,8 +61,9 @@ export function DataTable<TData, TValue>({
       columnFilters,
       pagination,
     },
-    onPaginationChange: onPaginationChange,
     enableRowSelection: true,
+    manualPagination: true,
+    onPaginationChange: onPaginationChange,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,

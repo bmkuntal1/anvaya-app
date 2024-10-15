@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatWidget } from '../../components/widgets/StatWidget';
+import { StatWidget } from '@/components/custom/widgets/StatWidget';
 import { Users, Package, Clock3, DollarSign, Table } from 'lucide-react';
 
 export const AdminDashboard: React.FC = () => {

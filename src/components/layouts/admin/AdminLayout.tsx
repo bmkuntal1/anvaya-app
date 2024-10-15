@@ -1,11 +1,20 @@
+import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
 import { Footer } from './../common/Footer';
 
 export const AdminLayout = () => {
+  // set overflow-y-hidden to body
+  useEffect(() => {
+    document.body.style.overflowY = 'hidden';
+    return () => {
+      document.body.style.overflowY = 'auto';
+    };
+  }, []);
+
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen overflow-y-hidden bg-gray-100">
       {/* Sidebar for large screens */}
       <Sidebar />
 
@@ -15,7 +24,7 @@ export const AdminLayout = () => {
         <Topbar />
 
         {/* Page content */}
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
           <Outlet />
         </main>
       </div>

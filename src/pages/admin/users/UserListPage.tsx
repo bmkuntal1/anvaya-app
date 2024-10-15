@@ -1,23 +1,25 @@
-import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useApi } from '@/hooks/use-api';
 import { DataTable } from '@/components/custom/data-table';
 import { PaginationState, Row, Updater } from '@tanstack/react-table';
-import { Button } from '@/components/ui/button';
-import { useQueryClient } from '@tanstack/react-query';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Eye, Pencil, Trash2 } from 'lucide-react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { UserStatus } from '@/components/custom/user/UserStatus';
 import { UserLastLogin } from '@/components/custom/user/UserLastLogin';
 import { getQueryString, staticFileUrl } from '@/lib/utils';
-import { SearchInput } from '@/components/custom/common/SearchInput';
-import { UserListToolbar } from './UserListToolbar';
-import { Card, CardContent } from '@/components/ui/card';
 import { useConfirmDialog } from '@/hooks/use-dialog';
 import { toast } from 'sonner';
-import { UserListFilter } from './UserListToolbar';
+import { UserListFilter, UserListFilterItem } from './UserListFilter';
+import axios from '@/lib/axios';
+import { UpdateUserDialog } from './UpdateUserDialog';
+import { PageContainer, PageContent, PageHeader, PageTitle } from '@/components/custom/common/PageContainer';
+import { SearchInput } from '@/components/custom/form/SearchInput';
+import { AddUserDialog } from './AddUserDialog';
 
-type UserListItem = {
+interface UserListItem {
   id: string;
   firstName: string;
   lastName: string;
@@ -28,25 +30,32 @@ type UserListItem = {
   lastLoggedinAt: string;
 };
 
-type UserListResponse = {
-  data: UserListItem[];
-  total: number;
-};
-
-
+const getUsersData = async ({ queryKey }: { queryKey: any }) => {
+  const [_key, queryParams] = queryKey;
+  const response = await axios.get(`/users?${getQueryString(queryParams)}`)
+  return response.data
+}
 
 export const UserListPage = () => {
-  const { useApiQuery, useApiMutation } = useApi();
   const [search, setSearch] = useState('');
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10, });
   const [filter, setFilter] = useState({ status: 'active', role: '' });
-  const queryClient = useQueryClient();
-  const { confirmDialog } = useConfirmDialog();
 
-  const { data, isLoading, error } = useApiQuery<UserListResponse>(`/users?${getQueryString({ search, status: filter.status, roles: filter.role, page: pagination.pageIndex + 1, pageSize: pagination.pageSize })}`,
-    {
-      queryKey: ['users'],
-    });
+  const queryClient = useQueryClient();
+  const { useApiMutation } = useApi();
+  const { confirmDialog } = useConfirmDialog();
+  const [updateId, setUpdateId] = useState<string | null>(null);
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['users', {
+      search,
+      status: filter.status,
+      role: filter.role,
+      page: pagination.pageIndex + 1,
+      pageSize: pagination.pageSize,
+    }],
+    queryFn: getUsersData
+  })
 
   const { mutate: updateUserStatus } = useApiMutation(`/users/status`, {
     method: 'put',
@@ -80,21 +89,21 @@ export const UserListPage = () => {
     }
   });
 
-  const handleSearch = (search: string) => {
-    setSearch(search);
-    setPagination({ pageIndex: 0, pageSize: pagination.pageSize });
-    queryClient.invalidateQueries({ queryKey: ['users'] });
+  const handleSearch = (_search: string) => {
+    setSearch(_search);
+    setPagination((previousPagination) => ({ ...previousPagination, pageIndex: 0 }));
+    //queryClient.invalidateQueries({ queryKey: ['users'] });
   };
 
-  const handlePaginationChange = (pagination: Updater<PaginationState>) => {
-    setPagination(pagination);
-    queryClient.invalidateQueries({ queryKey: ['users'] });
+  const handleFilterChange = (_filterItem: Updater<UserListFilterItem>) => {
+    setFilter(_filterItem);
+    setPagination((previousPagination) => ({ ...previousPagination, pageIndex: 0 }));
+    //queryClient.invalidateQueries({ queryKey: ['users'] });
   };
 
-  const handleFilterChange = (filterItem: Updater<UserListFilter>) => {
-    setFilter(filterItem);
-    setPagination({ pageIndex: 0, pageSize: pagination.pageSize });
-    queryClient.invalidateQueries({ queryKey: ['users'] });
+  const handlePaginationChange = (_pagination: Updater<PaginationState>) => {
+    setPagination(_pagination);
+    //queryClient.invalidateQueries({ queryKey: ['users'] });
   };
 
   const handleDelete = async (id: string) => {
@@ -118,14 +127,14 @@ export const UserListPage = () => {
       confirmText: 'Update',
     });
     if (result === true) {
-      updateUserStatus({ id, isActive: status === 'active' ? false : true });
+      updateUserStatus({ id, isActive: status !== 'active' });
       queryClient.invalidateQueries({ queryKey: ['users'] });
     }
   }
 
   const columns = [
     {
-      accessorKey: 'fullName', header: <span className="ps-3">Name</span>, cell: ({ row }: { row: Row<UserListItem> }) => (
+      accessorKey: 'fullName', header: () => <span className="ps-3">Name</span>, cell: ({ row }: { row: Row<UserListItem> }) => (
         <div className="flex items-center gap-2 ps-3">
           <Avatar>
             <AvatarImage src={staticFileUrl(row.original.avatar)} className="w-10 h-10 object-cover" />
@@ -152,16 +161,12 @@ export const UserListPage = () => {
       header: 'Actions',
       cell: ({ row }: { row: Row<UserListItem> }) => (
         <div className="flex items-center">
-          <Link to={`/admin/users/${row.original.id}`}>
-            <Button variant="ghost" size="icon">
-              <Eye className="h-4 w-4" />
-            </Button>
+          <Link to={`/users/${row.original.id}`} className={buttonVariants({ variant: "ghost", size: "icon" })}>
+            <Eye className="h-4 w-4" />
           </Link>
-          <Link to={`/admin/users/${row.original.id}/edit`}>
-            <Button variant="ghost" size="icon">
-              <Pencil className="h-4 w-4" />
-            </Button>
-          </Link>
+          <Button variant="ghost" size="icon" onClick={() => setUpdateId(row.original.id)}>
+            <Pencil className="h-4 w-4" />
+          </Button>
           <Button variant="ghost" size="icon" onClick={() => handleDelete(row.original.id)}>
             <Trash2 className="h-4 w-4" />
           </Button>
@@ -173,20 +178,21 @@ export const UserListPage = () => {
   if (error) return <div>An error occurred: {error.message}</div>;
 
   return (
-    <div className="container mx-auto">
-      <div className="flex justify-between items-center mb-4">
+    <PageContainer>
+      <PageHeader>
         <div className="flex items-center gap-2">
-          <h1 className="text-xl font-semibold">Users</h1>
+          <PageTitle>Users</PageTitle>
           <SearchInput placeholder="Search users..." onChange={handleSearch} />
+          <UserListFilter filter={filter} onFilterChange={handleFilterChange} />
         </div>
-        <UserListToolbar filter={filter} onFilterChange={handleFilterChange} />
-      </div>
-      {isLoading ? <div>Loading...</div> :
-        <Card>
-          <CardContent className="p-0 pb-4">
-            <DataTable data={data?.data || []} columns={columns} pagination={pagination} onPaginationChange={handlePaginationChange} />
-          </CardContent>
-        </Card>}
-    </div>
+        <AddUserDialog />
+      </PageHeader>
+      <PageContent variant="card">
+        {isLoading ? <div>Loading...</div> :
+          <DataTable data={data?.data || []} columns={columns} pagination={pagination} onPaginationChange={handlePaginationChange} pageCount={data?.totalPages} />
+        }
+      </PageContent>
+      <UpdateUserDialog userId={updateId} onClose={() => setUpdateId(null)} />
+    </PageContainer>
   );
 }
