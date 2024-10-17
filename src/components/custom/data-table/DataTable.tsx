@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/table"
 
 import { DataTablePagination } from "./DataTablePagination"
-// import { DataTableToolbar } from "./data-table-toolbar"
+import { DataTableViewOptions } from "./DataTableViewOptions"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -36,6 +36,10 @@ interface DataTableProps<TData, TValue> {
   pageCount: number
   pagination: PaginationState
   onPaginationChange: (pagination: Updater<PaginationState>) => void
+  sorting?: SortingState
+  onSortingChange?: (sorting: Updater<SortingState>) => void
+  columnVisibility?: VisibilityState
+  onColumnVisibilityChange?: (columnVisibility: Updater<VisibilityState>) => void
 }
 
 export function DataTable<TData, TValue>({
@@ -43,12 +47,15 @@ export function DataTable<TData, TValue>({
   data,
   pageCount,
   pagination,
+  sorting,
+  columnVisibility,
   onPaginationChange,
+  onSortingChange,
+  onColumnVisibilityChange,
+
 }: Readonly<DataTableProps<TData, TValue>>) {
   const [rowSelection, setRowSelection] = React.useState({})
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-  const [sorting, setSorting] = React.useState<SortingState>([])
 
   const table = useReactTable({
     data,
@@ -63,11 +70,12 @@ export function DataTable<TData, TValue>({
     },
     enableRowSelection: true,
     manualPagination: true,
+    manualSorting: true,
     onPaginationChange: onPaginationChange,
     onRowSelectionChange: setRowSelection,
-    onSortingChange: setSorting,
+    onSortingChange: onSortingChange,
     onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
+    onColumnVisibilityChange: onColumnVisibilityChange,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -128,7 +136,10 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-      <DataTablePagination table={table} />
+      <div className="flex justify-between items-center">
+        <DataTablePagination table={table} />
+        <DataTableViewOptions table={table} />
+      </div>
     </div>
   )
 }

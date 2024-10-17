@@ -3,16 +3,11 @@ import React from 'react';
 interface DataListProps {
     children: React.ReactNode;
     variant?: 'horizontal' | 'vertical';
-    columns?: number;
-    labelWidth?: string;
     className?: string;
 }
 
-const DataList = ({ children, columns = 1, labelWidth = '80px', variant = 'horizontal', className }: DataListProps) => {
-    const columnSet = Array.from({ length: columns }, () => `${labelWidth}_auto`).join('_');
-
-    const horizontal = variant === 'horizontal' ? `lg:grid-cols-[${columnSet}]` : '';
-
+// set columns based on variant manually eg md:grid-cols-[80px_auto] or md:grid-cols-[80px_auto_80px_auto]
+const DataList = ({ children, variant = 'horizontal', className }: DataListProps) => {
     const childrenWithProps = React.Children.map(children, child => {
         if (React.isValidElement(child)) {
             return React.cloneElement(child, { variant } as { variant?: 'horizontal' | 'vertical' });
@@ -21,7 +16,7 @@ const DataList = ({ children, columns = 1, labelWidth = '80px', variant = 'horiz
     });
 
     return (
-        <dl className={`grid grid-cols-[auto] ${horizontal} ${className}`}>
+        <dl className={`grid grid-cols-[auto] ${className}`}>
             {childrenWithProps}
         </dl>
     )
@@ -29,14 +24,14 @@ const DataList = ({ children, columns = 1, labelWidth = '80px', variant = 'horiz
 
 DataList.Label = ({ children, variant, className }: { children: React.ReactNode, variant?: 'horizontal' | 'vertical', className?: string }) => {
     if (variant === 'horizontal') {
-        return <dt className={`pr-2 lg:py-2 ${className}`}>{children}</dt>;
+        return <dt className={`pr-2 md:py-2 ${className}`}>{children}</dt>;
     }
     return <dt className={`pr-2 ${className}`}>{children}</dt>;
 }
 
 DataList.Value = ({ children, variant, className }: { children: React.ReactNode, variant?: 'horizontal' | 'vertical', className?: string }) => {
     if (variant === 'horizontal') {
-        return <dd className={`font-semibold pb-3 lg:pb-0 lg:py-2 ${className}`}>{children}</dd>;
+        return <dd className={`font-semibold pb-3 md:pb-0 md:py-2 ${className}`}>{children}</dd>;
     }
     return <dd className={`font-semibold pb-3 ${className}`}>{children}</dd>;
 }

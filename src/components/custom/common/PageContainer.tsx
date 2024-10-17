@@ -15,15 +15,15 @@ const PageTitle = ({ children }: { children: React.ReactNode }) => {
     return <h1 className="text-xl font-bold">{children}</h1>;
 }
 
-const PageContent = ({ children, variant }: { children: React.ReactNode, variant?: 'default' | 'card' }) => {
+const PageContent = ({ children, variant, className }: { children: React.ReactNode, variant?: 'default' | 'card', className?: string }) => {
     if (variant === 'card') {
         return <Card>
-            <CardContent>
+            <CardContent className={className}>
                 {children}
             </CardContent>
         </Card>
     }
-    return <div className="mt-4">{children}</div>;
+    return <div className={className}>{children}</div>;
 }
 
 export { PageContainer, PageHeader, PageTitle, PageContent };

@@ -11,6 +11,7 @@ import { useApi } from '@/hooks/use-api';
 import { useQueryClient } from '@tanstack/react-query';
 import { PlusCircle } from 'lucide-react';
 import { toast } from 'sonner';
+import { DialogClose } from '@radix-ui/react-dialog';
 
 const userFormSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
@@ -89,9 +90,11 @@ export const AddUserDialog = ({ onClose }: { onClose?: (success: boolean) => voi
           <FormInput control={form.control} name="phoneNumber" label="Phone Number" type="text" />
           <FormInput control={form.control} name="role" label="Roles" type="select" options={roleOptions} />
           <div className="flex justify-end space-x-2">
-            <Button variant="outline" type="button" disabled={isPending} className="w-[100px]" onClick={() => setOpen(false)}>
-              Cancel
-            </Button>
+            <DialogClose asChild className="w-[100px]">
+              <Button type="button" variant="outline" disabled={isPending} >
+                Cancel
+              </Button>
+            </DialogClose>
             <Button type="submit" disabled={isPending} className="w-[100px]">
               {isPending ? 'Creating...' : 'Create User'}
             </Button>

@@ -40,7 +40,7 @@ export const UpdateUserDialog = ({ userId, onClose }: UpdateUserDialogProps) => 
   const { useApiMutation, useApiQuery } = useApi();
   const queryClient = useQueryClient();
 
-  const { data, isLoading, error } = useApiQuery<any>(`/users/${userId}`, {queryKey: ['users', userId], enabled: !!userId });
+  const { data, isLoading, error } = useApiQuery<any>(`/users/${userId}`, { queryKey: ['users', userId], enabled: !!userId });
 
   const { isPending, mutate } = useApiMutation(`/users`, {
     method: 'put',
@@ -79,11 +79,11 @@ export const UpdateUserDialog = ({ userId, onClose }: UpdateUserDialogProps) => 
 
   return (
     <PageDialog open={userId !== null} onOpenChange={handleOpenChange} title="Update User">
-      {isLoading ? 
-      <div className="flex justify-center items-center min-h-[300px]">
-        <Loader2 className="h-4 w-4 animate-spin" />
-      </div>
-      :
+      {isLoading ?
+        <div className="flex justify-center items-center min-h-[300px]">
+          <Loader2 className="h-4 w-4 animate-spin" />
+        </div>
+        :
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormInput control={form.control} name="firstName" label="First Name" type="text" />
@@ -91,8 +91,10 @@ export const UpdateUserDialog = ({ userId, onClose }: UpdateUserDialogProps) => 
             <FormInput control={form.control} name="phoneNumber" label="Phone Number" type="text" />
             <FormInput control={form.control} name="role" label="Roles" type="select" options={roleOptions} />
             <div className="flex justify-end space-x-2">
-              <DialogClose asChild disabled={isPending} className="w-[100px]">
-                Cancel
+              <DialogClose asChild className="w-[100px]">
+                <Button type="button" variant="outline" disabled={isPending} >
+                  Cancel
+                </Button>
               </DialogClose>
               <Button type="submit" disabled={isPending} className="w-[100px]">
                 {isPending ? 'Updating...' : 'Update User'}

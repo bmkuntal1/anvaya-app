@@ -2,14 +2,13 @@ import { useApi } from "@/hooks/use-api";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { buttonVariants } from "@/components/ui/button";
-import { ArrowLeftIcon, User } from "lucide-react";
+import { ArrowLeftIcon } from "lucide-react";
 import { DataList as Dl } from "@/components/custom/common/DataList";
 import { PageContainer, PageContent, PageHeader } from '@/components/custom/common/PageContainer';
 import { Skeleton } from "@/components/ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { formatDate, staticFileUrl } from "@/lib/utils";
+import { staticFileUrl } from "@/lib/utils";
 import { UserStatus } from "@/components/custom/user/UserStatus";
-import { UserLastLogin } from "@/components/custom/user/UserLastLogin";
 import { DateDisplay } from "@/components/custom/common/DateDisplay";
 
 export const UserDetailPage = () => {
@@ -40,7 +39,7 @@ export const UserDetailPage = () => {
                                 <p className="text-sm text-gray-500">{data?.email}</p>
                             </div>
                         </div>
-                        <Dl labelWidth="120px" className="p-6 pt-0">
+                        <Dl className="md:grid-cols-[120px_auto_120px_auto] p-6 pt-0">
                             <Dl.Label>First Name</Dl.Label>
                             <Dl.Value>{data?.firstName}</Dl.Value>
                             <Dl.Label>Last Name</Dl.Label>
