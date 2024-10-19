@@ -16,7 +16,7 @@ export const PageDialog = ({ children, title, open, onOpenChange, trigger }: Pag
                 <DialogHeader>
                     <DialogTitle>{title}</DialogTitle>
                 </DialogHeader>
-                <DialogDescription />
+                <DialogDescription className="hidden" />
                 {children}
             </DialogContent>
         </Dialog>

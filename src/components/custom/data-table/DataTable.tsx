@@ -136,10 +136,7 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-      <div className="flex justify-between items-center">
-        <DataTablePagination table={table} />
-        <DataTableViewOptions table={table} />
-      </div>
+      <DataTablePagination table={table} />
     </div>
   )
 }

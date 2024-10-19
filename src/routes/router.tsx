@@ -1,9 +1,13 @@
 import { createBrowserRouter } from "react-router-dom";
 import { NotFound } from "@/pages/common/NotFound";
-import { commonRoutes } from "@/pages/common/routes";
-
+import { UnauthorizedPage } from "@/pages/common/UnauthorizedPage";
+import { LoginPage } from "@/pages/common/auth/LoginPage";
+import { adminRoutes } from "@/pages/admin/routes";
 const routes = [
-    ...commonRoutes,
+    { path: "/login", element: <LoginPage /> },
+    ...adminRoutes,
+
+    { path: "/unauthorized", element: <UnauthorizedPage /> },
     { path: "*", element: <NotFound /> },
 ];
 

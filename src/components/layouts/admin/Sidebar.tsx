@@ -1,5 +1,5 @@
 import {NavLink} from '../common/NavLink';
-import {navItems} from './navItems';
+import {navItems} from './adminMenu';
 
 export const Sidebar = () => {
   return (

@@ -1,12 +1,11 @@
-import { Link } from "react-router-dom";
+import { NavLink as RouterNavLink } from "react-router-dom";
 import { cn } from "../../../lib/utils";
 
 export const NavLink: React.FC<{ href: string; children: React.ReactNode }> = ({ href, children }) => {
-    const isActive = location.pathname === href;
     return (
-        <Link
+        <RouterNavLink
             to={href}
-            className={cn(
+            className={({ isActive }) => cn(
                 "flex items-center py-2 px-4 text-sm font-medium rounded-md",
                 isActive
                     ? "bg-gray-800 text-white"
@@ -14,6 +13,6 @@ export const NavLink: React.FC<{ href: string; children: React.ReactNode }> = ({
             )}
         >
             {children}
-        </Link>
+        </RouterNavLink>
     );
 };

@@ -1,7 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
-const PageContainer = ({ children }: { children: React.ReactNode }) => {
-    return <div className="container mx-auto p-6 pt-0">{children}</div>;
+const PageContainer = ({ children, className }: { children: React.ReactNode, className?: string }) => {
+    return <div className={cn("container mx-auto p-6 pt-0", className)}>{children}</div>;
 }
 
 const PageHeader = ({ title, children }: { title?: string | React.ReactNode, children?: React.ReactNode }) => {

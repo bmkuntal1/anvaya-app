@@ -9,7 +9,7 @@ import { useApi } from '@/hooks/use-api';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { DialogClose } from '@/components/ui/dialog';
-import { Loader2 } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface UpdateUserDialogProps {
   userId: string | null;
@@ -79,11 +79,7 @@ export const UpdateUserDialog = ({ userId, onClose }: UpdateUserDialogProps) => 
 
   return (
     <PageDialog open={userId !== null} onOpenChange={handleOpenChange} title="Update User">
-      {isLoading ?
-        <div className="flex justify-center items-center min-h-[300px]">
-          <Loader2 className="h-4 w-4 animate-spin" />
-        </div>
-        :
+      {isLoading ? <LoadingSkeleton /> :
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormInput control={form.control} name="firstName" label="First Name" type="text" />
@@ -103,5 +99,22 @@ export const UpdateUserDialog = ({ userId, onClose }: UpdateUserDialogProps) => 
           </form>
         </Form>}
     </PageDialog>
+  );
+}
+
+const LoadingSkeleton = () => {
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="w-full max-w-xs">
+        <Skeleton className="h-6 w-full mb-2" /> {/* Placeholder for First Name */}
+        <Skeleton className="h-6 w-full mb-2" /> {/* Placeholder for Last Name */}
+        <Skeleton className="h-6 w-full mb-2" /> {/* Placeholder for Phone Number */}
+        <Skeleton className="h-6 w-full mb-2" /> {/* Placeholder for Roles */}
+      </div>
+      <div className="flex justify-end space-x-2">
+        <Skeleton className="h-10 w-24" /> {/* Placeholder for Cancel Button */}
+        <Skeleton className="h-10 w-24" /> {/* Placeholder for Update User Button */}
+      </div>
+    </div>
   );
 }
