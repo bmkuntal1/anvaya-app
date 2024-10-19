@@ -12,7 +12,7 @@ const getAppInfo = async () => {
 }
 
 const AppInfoPage = () => {
-    const { data: appInfo, isLoading } = useQuery({
+    const { data:api, isLoading } = useQuery({
         queryKey: ["appInfo"],
         queryFn: getAppInfo
     })
@@ -25,14 +25,18 @@ const AppInfoPage = () => {
                 </Link>
             </PageHeader>
             <PageContent variant="card" className="p-10">
-                <h2 className="text-xl font-semibold text-gray-800">Backend Service Info</h2>
-                <Dl variant="vertical" className="mt-6">
-                    <Dl.Label>Service</Dl.Label>
-                    <Dl.Value>{appInfo?.name}</Dl.Value>
-                    <Dl.Label>Version</Dl.Label>
-                    <Dl.Value>{appInfo?.version}</Dl.Value>
-                    <Dl.Label>Environment</Dl.Label>
-                    <Dl.Value>{appInfo?.environment}</Dl.Value>
+                <h2 className="text-xl font-semibold text-gray-800">Application Information</h2>
+                <Dl className="md:grid-cols-[160px_auto] mt-6">
+                    <Dl.Label>App Name</Dl.Label>
+                    <Dl.Value>{import.meta.env.VITE_APP_NAME}</Dl.Value>
+                    <Dl.Label>App Version</Dl.Label>
+                    <Dl.Value>{import.meta.env.VITE_APP_VERSION}</Dl.Value>
+                    <Dl.Label>App Environment</Dl.Label>
+                    <Dl.Value>{import.meta.env.MODE}</Dl.Value>
+                    <Dl.Label>API Version</Dl.Label>
+                    <Dl.Value>{api?.version}</Dl.Value>
+                    <Dl.Label>API Environment</Dl.Label>
+                    <Dl.Value>{api?.environment}</Dl.Value>
                 </Dl>
             </PageContent>
         </PageContainer>

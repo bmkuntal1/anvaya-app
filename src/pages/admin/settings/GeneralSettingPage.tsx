@@ -18,7 +18,7 @@ export const GeneralSettingPage = () => {
     }
 
     return (
-        <div>
+        <>
             <div>
                 <h3 className="text-lg font-medium">General Settings</h3>
                 <p className="text-sm text-muted-foreground">
@@ -68,6 +68,6 @@ export const GeneralSettingPage = () => {
                     </div>
                 </form>
             </Form>
-        </div>
+        </>
     )
 }

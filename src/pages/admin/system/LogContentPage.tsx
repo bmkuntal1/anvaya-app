@@ -11,10 +11,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export const LogContentPage = () => {
     const { fileName } = useParams<{ fileName: string }>();
-    const { data, isLoading, error } = useQuery({ queryKey: ['log-content', fileName as string], queryFn: getLogContent, enabled: !!fileName });
-
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error loading log content</div>;
+    const { data, isLoading, error } = useQuery({ queryKey: ['log-content', fileName as string], 
+        queryFn: getLogContent, enabled: !!fileName });
 
     return (
         <PageContainer>
@@ -24,17 +22,38 @@ export const LogContentPage = () => {
                     Back to Logs
                 </Link>
             </PageHeader>
-            <PageContent className="h-[calc(100vh-10rem)]">
-                <Textarea
-                    value={data.content || "No log contents available"}
-                    className="h-full resize-none p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+            <PageContent variant={isLoading ? "card" : "default"} className="h-[calc(100vh-10rem)]">
+                {isLoading ? <LoadingSkelton /> :
+                    <Textarea
+                        value={data?.content || "No log contents available"}
+                        className="h-full resize-none p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                }
             </PageContent>
         </PageContainer>
     )
+}
+
+const LoadingSkelton = () => {
+    return <div className="h-[calc(100vh-10rem)] space-y-2 p-6">
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-1/2" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-1/2" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-1/2" />
+        <div className="my-2" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-1/2" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-1/2" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-1/2" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-1/2" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-1/2" />
 
 
-    const LoadingSkeleton = () => {
-        return <Skeleton className="h-full w-full" />
-    }
+    </div>
 }

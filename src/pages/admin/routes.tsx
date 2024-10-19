@@ -3,15 +3,15 @@ import { AdminLayout } from "@/components/layouts/admin/AdminLayout";
 import { DashboardPage } from "@/pages/common/dashboards/DashboardPage";
 import { UserListPage } from "@/pages/admin/users/UserListPage";
 import { UserDetailPage } from "@/pages/admin/users/UserDetailPage";
-import { LogListPage } from "@/pages/admin/logs/LogListPage";
-import { LogContentPage } from "@/pages/admin/logs/LogContentPage";
+import { LogListPage } from "@/pages/admin/system/LogListPage";
+import { LogContentPage } from "@/pages/admin/system/LogContentPage";
 import { SettingLayout } from "@/pages/admin/settings/SettingLayout";
 import { GeneralSettingPage } from "@/pages/admin/settings/GeneralSettingPage";
 import { CustomListPage } from "@/pages/admin/settings/CustomListPage";
 import UserProfilePage from "@/pages/common/profile/UserProfilePage";
 import { ProfileLayout } from "@/pages/common/profile/ProfileLayout";
 import AccountSettingPage from "@/pages/common/profile/AccountSettingPage";
-import AppInfoPage from "./settings/AppInfoPage";
+import AppInfoPage from "./system/AppInfoPage";
 
 const commonRoutes = [
     { path: "/", element: <DashboardPage /> },
