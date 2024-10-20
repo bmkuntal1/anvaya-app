@@ -26,16 +26,18 @@ export const LogListPage = () => {
     //Date	File Name	Size	Action
     const columns = [
         {
+            name: "File Name",
+            header: "File Name",
+            accessorKey: "name",
+            cell: ({ row }: any) => <Link to={`/logs/${row.original.name?.slice(0, -4)}`} className="flex items-center gap-1 text-blue-500 hover:underline hover:text-blue-600">
+                <FileText className="w-4 h-4 mr-2" strokeWidth={0.8} /> {row.original.name}
+            </Link>
+        },
+        {
             name: "Date",
             header: "Date",
             accessorKey: "date",
             cell: ({ row }: any) => <span>{new Date(row.original.date).toLocaleDateString()}</span>
-        },
-        {
-            name: "File Name",
-            header: "File Name",
-            accessorKey: "name",
-            cell: ({ row }: any) => <Link to={`/logs/${row.original.name?.slice(0, -4)}`}>{row.original.name}</Link>
         },
         {
             name: "Size",
@@ -48,13 +50,7 @@ export const LogListPage = () => {
             header: "Health",
             accessorKey: "health",
             cell: ({ row }: any) => <HealthBadge health={row.original.health} />
-        },
-        {
-            name: "Action",
-            header: "Action",
-            accessorKey: "action",
-            cell: ({ row }: any) => <Link to={`/logs/${row.original.name?.slice(0,-4)}`}><FileText className="w-4 h-4 mr-2" strokeWidth={0.8} />  </Link>
-        },
+        }
     ];
 
     return (
