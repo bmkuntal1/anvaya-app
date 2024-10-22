@@ -40,7 +40,7 @@ export const UserDropdown = () => {
                     <Button variant="ghost" className="h-6 w-6 rounded-full">
                         <Avatar>
                             <AvatarImage src={staticFileUrl(user?.avatar)} alt={user?.email} className="object-cover" />
-                            <AvatarFallback>{user?.email?.charAt(0) || 'U'}</AvatarFallback>
+                            <AvatarFallback >{user?.firstName?.charAt(0).toUpperCase()}{user?.lastName?.charAt(0).toUpperCase()}</AvatarFallback>
                         </Avatar>
                     </Button>
                 </div>
