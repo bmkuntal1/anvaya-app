@@ -18,14 +18,14 @@ const AppInfoPage = () => {
     })
     return (
         <PageContainer className="md:max-w-screen-lg">
-            <PageHeader title="App Info">
+            <PageHeader title="About">
                 <Link to="/" className={buttonVariants({ variant: "ghost", size: "sm" })}>
                     <ArrowLeft className="w-4 h-4 mr-2" strokeWidth={0.8} />
                     Back to Dashboard
                 </Link>
             </PageHeader>
             <PageContent variant="card" className="p-10">
-                <h2 className="text-xl font-semibold text-gray-800">Application Information</h2>
+                <h2 className="text-xl font-semibold text-gray-800">Anvaya App</h2>
                 <Dl className="md:grid-cols-[160px_auto] mt-6">
                     <Dl.Label>App Name</Dl.Label>
                     <Dl.Value>{import.meta.env.VITE_APP_NAME}</Dl.Value>

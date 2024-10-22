@@ -245,7 +245,7 @@ const CustomListItem = ({ item, onEdit, onStatusChange, onDelete, isDeleting, is
             <CardContent className="flex items-center justify-between px-4 py-2">
                 <div className="text-sm font-medium">
                     <div className="flex flex-col items-start gap-1">
-                        <code className="text-xs text-muted-foreground">{item.key} :: {item.id} :{item.order}</code>
+                        <code className="text-xs text-muted-foreground">{item.key}</code>
                         {item.value}
                     </div>
                 </div>

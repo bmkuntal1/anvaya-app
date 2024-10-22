@@ -43,7 +43,7 @@ export const adminRoutes = [
                         ]
                     },
                     { path: "/logs/:fileName", element: <LogContentPage /> },
-                    { path: "/info", element: <AppInfoPage /> }
+                    { path: "/about", element: <AppInfoPage /> }
                 ]
             }
         ]

@@ -17,14 +17,14 @@ const sidebarNavItems = [
 
 export const SettingLayout = () => {
     return (
-        <PageContainer>
+        <PageContainer className="md:max-w-screen-lg">
             <PageHeader title="App Settings">
                 <Link to="/" className={buttonVariants({ variant: "ghost", size: "sm" })}>
                     <ArrowLeft className="w-4 h-4 mr-2" strokeWidth={0.8} />
                     Back to Dashboard
                 </Link>
             </PageHeader>
-            <PageContent variant="card" className="h-[calc(100vh-10rem)] p-10">
+            <PageContent variant="card" className="p-10">
                 <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
                     <aside className="-mx-4 lg:w-1/5">
                         <SidebarNav items={sidebarNavItems} />
