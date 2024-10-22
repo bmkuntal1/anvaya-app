@@ -1,6 +1,10 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectValue, SelectItem, SelectTrigger } from "@/components/ui/select";
+import { PasswordInput } from "./PasswordInput";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+
+const REGEXP_ONLY_DIGITS_AND_CHARS = "^[0-9]*$";
 
 export const FormInput = ({ control, ...rest }: any) => {
     if (!control) throw new Error("Control is required");
@@ -41,13 +45,7 @@ export const FormInput = ({ control, ...rest }: any) => {
             render={({ field }) => (
                 <FormItem>
                     <FormLabel>{rest.label}</FormLabel>
-                    <FormControl>
-                        <Input
-                            type={rest.type}
-                            placeholder={rest.placeholder || rest.label}
-                            {...field}
-                        />
-                    </FormControl>
+                    <CustomTextInputs field={field} {...rest} />
                     <FormMessage className="text-red-500 text-sm font-normal" />
                 </FormItem>
             )}
@@ -55,3 +53,26 @@ export const FormInput = ({ control, ...rest }: any) => {
     )
 }
 
+const CustomTextInputs = ({ field, ...rest }: any) => {
+    if (rest.type === 'password') {
+        return <PasswordInput {...field} placeholder={rest.placeholder || rest.label} />
+    }
+    if (rest.type === 'otp') {
+        return <InputOTP pattern={REGEXP_ONLY_DIGITS_AND_CHARS} {...field} maxLength={rest.maxLength}>
+            <InputOTPGroup>
+                <InputOTPSlot index={0} />
+                <InputOTPSlot index={1} />
+            </InputOTPGroup>
+            <InputOTPGroup>
+                <InputOTPSlot index={2} />
+
+                <InputOTPSlot index={3} />
+            </InputOTPGroup>
+            <InputOTPGroup>
+                <InputOTPSlot index={4} />
+                <InputOTPSlot index={5} />
+            </InputOTPGroup>
+        </InputOTP>
+    }
+    return <Input type={rest.type} placeholder={rest.placeholder || rest.label} {...field} />
+}
