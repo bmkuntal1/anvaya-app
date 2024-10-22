@@ -3,6 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { jwtDecode } from 'jwt-decode';
 import { AuthState, Tokens, User } from '@/types/auth';
 import axios from 'axios';
+import dayjs from 'dayjs';
 
 export const STORAGE_KEY = 'anvaya_s962';
 
@@ -16,13 +17,12 @@ export const useAuthStore = create<AuthState>()(
       expiresAt: null,
       login: (tokens: Tokens) => {
         const decodedToken = jwtDecode<User>(tokens.accessToken);
-        const expiresAt = Date.now() + tokens.expiresIn * 1000; // Convert expiresIn to milliseconds and add to current time
         set({
           isAuthenticated: true,
           user: decodedToken,
           accessToken: tokens.accessToken,
           refreshToken: tokens.refreshToken,
-          expiresAt,
+          expiresAt: tokens.expires,
         });
       },
       logout: () => {
@@ -42,11 +42,10 @@ export const useAuthStore = create<AuthState>()(
         try {
           const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/refresh`, { refreshToken });
           const newTokens: Tokens = response.data;
-          const expiresAt = Date.now() + newTokens.expiresIn * 1000;
           set({
             accessToken: newTokens.accessToken,
             refreshToken: newTokens.refreshToken,
-            expiresAt,
+            expiresAt: newTokens.expires,
           });
           return newTokens.accessToken;
         } catch (error) {
@@ -58,7 +57,7 @@ export const useAuthStore = create<AuthState>()(
       isTokenExpired: () => {
         const { expiresAt } = get();
         if (!expiresAt) return true;
-        return Date.now() >= expiresAt;
+        return dayjs().isAfter(expiresAt);
       },
     }),
     {

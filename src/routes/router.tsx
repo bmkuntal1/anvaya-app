@@ -1,27 +1,15 @@
 import { createBrowserRouter } from "react-router-dom";
-import { ProtectedRoute } from "../components/ProtectedRoute";
-import { NotFound } from "../pages/common/NotFound";
-import { UnauthorizedPage } from "../pages/common/UnauthorizedPage";
-import { LoginPage } from "../pages/common/auth/LoginPage";
-import { AdminLayout } from "../components/layouts/admin/AdminLayout";
-import { DashboardPage } from "../pages/common/DashboardPage";
-import { UserListPage } from "../pages/admin/users/UserListPage";
+import { NotFound } from "@/pages/common/NotFound";
+import { UnauthorizedPage } from "@/pages/common/UnauthorizedPage";
+import { LoginPage } from "@/pages/common/auth/LoginPage";
+import { adminRoutes } from "@/pages/admin/routes";
+import { ForgotPasswordPage } from "@/pages/common/auth/ForgotPasswordPage";
 const routes = [
     { path: "/login", element: <LoginPage /> },
+    { path: "/forgot-password", element: <ForgotPasswordPage /> },
+    ...adminRoutes,
+
     { path: "/unauthorized", element: <UnauthorizedPage /> },
-    {
-        element: <ProtectedRoute allowedRoles={['admin']} />,
-        children: [
-            {
-                path: "/",
-                element: <AdminLayout />,
-                children: [
-                    { path: "/", element: <DashboardPage /> },
-                    { path: "/users", element: <UserListPage /> },
-                ]
-            }
-        ]
-    },
     { path: "*", element: <NotFound /> },
 ];
 

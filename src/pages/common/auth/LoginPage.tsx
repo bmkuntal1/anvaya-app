@@ -6,7 +6,7 @@ import { useApi } from "@/hooks/use-api";
 import { AuthLayout } from "./AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { FormInput } from "@/components/ui/form-input";
+import { FormInput } from "@/components/custom/form/FormInput";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { useAuthStore } from "@/stores/authStore";
@@ -22,7 +22,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export const LoginPage = () => {
   const { toast } = useToast();
-  const { usePostMutation } = useApi();
+  const { useApiMutation } = useApi();
   const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
 
@@ -34,7 +34,7 @@ export const LoginPage = () => {
     },
   });
 
-  const loginMutation = usePostMutation<{ token: string }, LoginFormData>('/auth/login', {
+  const loginMutation = useApiMutation('/auth/login', {
     onSuccess: (data) => {
       toast({ title: "Login successful", description: "Welcome back!" });
       login(data.data as Tokens);
@@ -62,15 +62,22 @@ export const LoginPage = () => {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
               <FormInput control={form.control} name="email" label="Email" type="email" placeholder="m@example.com" />
-              <FormInput control={form.control} name="password" label="Password" type="password" placeholder="********" />
+              <div className="relative">
+                <Link to="/forgot-password" className="absolute right-0 top-1 text-sm text-gray-800 hover:underline">
+                  Forgot Password?
+                </Link>
+                <FormInput control={form.control} name="password" label="Password" type="password" placeholder="********" />
+              </div>
               <Button type="submit" className="w-full" disabled={loginMutation.isPending}>
                 {loginMutation.isPending ? "Logging in..." : "Login"}
               </Button>
-              <Button variant="outline" className="w-full">
-                Login with Google
-              </Button>
             </form>
           </Form>
+          <div className="flex items-center justify-center gap-2 mt-2">
+            <div className="h-px bg-gray-200 w-full"></div>
+            <span className="text-gray-500">OR</span>
+            <div className="h-px bg-gray-200 w-full"></div>
+          </div>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
             <Link to="/signup" className="underline">

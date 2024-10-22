@@ -1,17 +1,14 @@
 import { create } from 'zustand';
+import { ConfirmDialogProps } from '@/components/custom/dialogs/ConfirmDialog';
 
 interface AppState {
-    confirmDialog: {
-        open: boolean;
-        result: boolean | null;
-    }
+    confirmDialog: ConfirmDialogProps | null;
+    openConfirmDialog: (props: ConfirmDialogProps) => void;
+    closeConfirmDialog: () => void;
 }
 
 export const appStore = create<AppState>()((set) => ({
-    confirmDialog: {
-        open: false,
-        result: null,
-    },
-    openConfirmDialog: () => set({ confirmDialog: { open: true, result: null } }),
-    closeConfirmDialog: (result: boolean) => set({ confirmDialog: { open: false, result } }),
+    confirmDialog: null,
+    openConfirmDialog: (props: ConfirmDialogProps) => set({ confirmDialog: props }),
+    closeConfirmDialog: () => set({ confirmDialog: null }),
 }))
